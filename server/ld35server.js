@@ -24,6 +24,7 @@ var posX = 100;
 var clientColors = [0xff0000, 0x0000ff, 0xffff00, 0x00ff00, 0xff00ff];
 var clients = {};
 var nextClientId = 0;
+var world = { planets: []};
 
 function getRelevantProps(obj) {
 	return {
@@ -35,9 +36,12 @@ function getRelevantProps(obj) {
 		throttle: obj.throttle,
 		turn: obj.turn,
 		form: obj.form,
+		alive: obj.alive,
 		velocity: obj.velocity
 	};
 }
+
+initWorld();
 
 io.on('connection', function(socket) {
 	console.log('a user connected');
@@ -50,9 +54,12 @@ io.on('connection', function(socket) {
 		y: 300,
 		angle: 0,
 		form: 1,
+		alive: true,
 		velocity: { x: 0, y: 0 },
 		color: clientColors[myId % clientColors.length]
 	};
+
+	socket.emit('world', world);
 
 	var myProps = getRelevantProps(clients[myId]);
 	socket.emit('my_props', myProps);
@@ -64,8 +71,12 @@ io.on('connection', function(socket) {
 		}
 	}
 
-	socket.on('removeBlock', function (data) {
-		socket.broadcast.emit('removeBlock', data);
+	socket.on('shipdeath', function (clientId) {
+		socket.broadcast.emit('shipdeath', clientId);
+		setTimeout(function() {
+			resetShip(clientId, socket);
+		}, 3000);
+
 	});
 
 	socket.on('updateLoc', function (data) {
@@ -86,3 +97,25 @@ io.on('connection', function(socket) {
 		delete clients[myId];
 	});
 });
+
+function resetShip(clientId, socket) {
+	clients[clientId].x = Math.floor(Math.random()*world.width);
+	clients[clientId].y = Math.floor(Math.random()*world.height);
+	clients[clientId].alive = true;
+	var myProps = getRelevantProps(clients[clientId]);
+	socket.broadcast.emit('loc', myProps);
+	socket.emit('loc', myProps);
+
+}
+
+function initWorld() {
+	world.width = 2400;
+	world.height = 2400;
+
+	// generate planets
+	for (var i=0; i<8; i++) {
+		var x = Math.floor(Math.random() * world.width);
+		var y = Math.floor(Math.random() * world.height);
+		world.planets.push({ x: x, y: y });
+	}
+}

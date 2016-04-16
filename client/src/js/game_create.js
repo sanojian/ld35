@@ -14,7 +14,7 @@ GameState.prototype.create = function() {
 	for (y=0; y<this.game.world.height; y++) {
 		starMap[y] = [];
 		for (x=0; x<this.game.world.width; x++) {
-			if (Math.random() < 0.0003) {
+			if (Math.random() < 0.0002) {
 				starMap[y][x] = { alpha: Math.random(), tint: Math.random() };
 			}
 			else {
@@ -45,9 +45,9 @@ GameState.prototype.create = function() {
 		for (x = 0; x < this.game.world.width; x++) {
 			if (starMap[y][x] !== 0) {
 				var star = this.game.add.image(x, y, 'star');
-				star.scale.set(2);
+				star.scale.set(g_game.scale);
 				star.alpha = 0.3 + starMap[y][x].alpha * 0.5;
-				star.tint = 7*0xffffff/8 + starMap[y][x].tint * 0xffffff/8;
+				star.tint = starMap[y][x].tint * 0xffffff;
 			}
 		}
 	}
@@ -56,9 +56,35 @@ GameState.prototype.create = function() {
 
 	this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
+	g_game.planets = this.game.add.group();
+
+	g_game.myBullets = this.game.add.group();
+	var bullet;
+	for (var i=0; i<20; i++) {
+		bullet = this.game.add.sprite(0, 0, 'bullet');
+		bullet.anchor.set(0.5, 0.5);
+		bullet.scale.set(2);
+		bullet.customProps = { ownerId: -1 };
+		this.game.physics.enable(bullet);
+		g_game.myBullets.add(bullet);
+		bullet.kill();
+	}
+	g_game.enemyBullets = this.game.add.group();
+	for (i=0; i<200; i++) {
+		bullet = this.game.add.sprite(0, 0, 'bullet');
+		bullet.anchor.set(0.5, 0.5);
+		bullet.scale.set(2);
+		bullet.customProps = { ownerId: -1 };
+		this.game.physics.enable(bullet);
+		g_game.enemyBullets.add(bullet);
+		bullet.kill();
+	}
+
 	g_game.friendlyUnits = this.game.add.group();
 	g_game.player = new UnitPlayer(this.game, 1200, 1200, 'ship');
 	g_game.friendlyUnits.add(g_game.player);
+
+	g_game.enemyUnits = this.game.add.group();
 
 	g_game.cursors = this.game.input.keyboard.createCursorKeys();
 

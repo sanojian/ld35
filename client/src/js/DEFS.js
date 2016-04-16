@@ -6,6 +6,7 @@
 window.g_game = {
 	baseWidth: 24*48,
 	baseHeight: 15*48,
+	scale: 3,
 
 	SHOOT_TIMER: 2000,
 

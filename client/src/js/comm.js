@@ -5,8 +5,10 @@
 function initNetworking() {
 	gameSocket = io();
 
+	//var myId;
 	gameSocket.on('my_props', function(props) {
 		myId = props.id;
+		g_game.myId = myId;
 		clients[props.id] = props;
 		g_game.player.x = props.x;
 		g_game.player.y = props.y;
@@ -22,7 +24,7 @@ function initNetworking() {
 		clients[props.id] = props;
 		var player = new Unit(g_game.phaserGame, props.x, props.y, 'ship');
 		player.tint = props.color;
-		g_game.friendlyUnits.add(player);
+		g_game.enemyUnits.add(player);
 		clients[props.id].sprite = player;
 	});
 
@@ -31,9 +33,22 @@ function initNetworking() {
 		delete clients[id];
 	});
 
-	gameSocket.on('removeBlock', function(wall) {
-		g_game.map.removeTile(wall.x, wall.y);
+	gameSocket.on('world', function(world) {
+		for (var i=0; i<world.planets.length; i++) {
+			var planet = new Entity(g_game.phaserGame, world.planets[i].x, world.planets[i].y, 'planet');
+			planet.anchor.set(0.5, 0.5);
+			planet.scale.set(g_game.scale);
+			g_game.phaserGame.physics.enable(planet);
+			g_game.planets.add(planet);
+		}
+	});
 
+	gameSocket.on('shipdeath', function(clientId) {
+		console.log('kill ' + clientId);
+		clients[clientId].sprite.customProps.alive = false;
+		setTimeout(function() {
+			clients[clientId].sprite.customProps.alive = true;
+		}, 3000);
 	});
 
 	gameSocket.on('loc', function(client) {
@@ -43,6 +58,7 @@ function initNetworking() {
 		clients[client.id].sprite.x = client.x;
 		clients[client.id].sprite.y = client.y;
 		clients[client.id].sprite.angle = client.angle;
+		clients[client.id].sprite.customProps.alive = client.alive;
 		clients[client.id].sprite.customProps.throttle = client.throttle;
 		clients[client.id].sprite.customProps.turn = client.turn;
 		clients[client.id].sprite.body.velocity.x = client.velocity.x;
@@ -52,7 +68,7 @@ function initNetworking() {
 			clients[client.id].sprite.xform(client.form);
 		}
 		if (client.shooting) {
-			clients[client.id].sprite.shoot();
+			clients[client.id].sprite.shoot(client.id);
 		}
 
 	});
