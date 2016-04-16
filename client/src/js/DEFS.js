@@ -6,22 +6,22 @@
 window.g_game = {
 	baseWidth: 24*48,
 	baseHeight: 15*48,
-	//Room width and height (?)
 
-	gravity: 1400,
-	hozMove: 160,
-	vertMove: -460,
-	maxVertMove: 600,
-	//Physics & movement
+	SHOOT_TIMER: 2000,
 
-	jumpTimer: 0,
-	shootTimer: 0,
-	JUMP_TIMEOUT: 350,
-	SHOOT_TIMEOUT: 550,
-	//Timing
-
-	currentLevel: 0,
-	LEVEL_TIMEOUT: 15000,
-	PLATFORM_SPEED: 150
-	//Misc
+	FORM_0: {
+		thrust: 0,
+		turn: 0,
+		shoot_timer: 100000
+	},
+	FORM_1: {
+		thrust: 2,
+		turn: 1,
+		shoot_timer: 2000
+	},
+	FORM_2: {
+		thrust: 1,
+		turn: 3,
+		shoot_timer: 500
+	}
 };

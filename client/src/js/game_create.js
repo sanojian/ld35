@@ -54,7 +54,7 @@ GameState.prototype.create = function() {
 
 
 
-			this.game.physics.startSystem(Phaser.Physics.ARCADE);
+	this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
 	g_game.friendlyUnits = this.game.add.group();
 	g_game.player = new UnitPlayer(this.game, 1200, 1200, 'ship');
@@ -62,12 +62,12 @@ GameState.prototype.create = function() {
 
 	g_game.cursors = this.game.input.keyboard.createCursorKeys();
 
-	g_game.buttonXform = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+	g_game.shootButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
 	this.game.camera.follow(g_game.player, Phaser.Camera.FOLLOW_LOCKON);
 	//this.game.camera.follow(g_game.player, Phaser.Camera.FOLLOW_PLATFORMER);
 
 	// dont pause when tab out of focus
 	this.stage.disableVisibilityChange = true;
-	//initNetworking();
+	initNetworking();
 };
