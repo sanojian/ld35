@@ -1,0 +1,19 @@
+{
+  "name": "ld35",
+  "version": "0.0.1",
+  "scripts": {
+    "postinstall": "grunt build",
+    "start": "node ./server/ld35server.js"
+  },
+  "dependencies": {
+    "express": "^4.13.3",
+    "socket.io": "^1.3.7",
+    "grunt": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-develop": "*",
+    "grunt-cli": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-jshint": "*"
+  }
+}
