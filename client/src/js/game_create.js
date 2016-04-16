@@ -14,7 +14,7 @@ GameState.prototype.create = function() {
 	for (y=0; y<this.game.world.height; y++) {
 		starMap[y] = [];
 		for (x=0; x<this.game.world.width; x++) {
-			if (Math.random() < 0.0005) {
+			if (Math.random() < 0.0003) {
 				starMap[y][x] = { alpha: Math.random(), tint: Math.random() };
 			}
 			else {
@@ -47,7 +47,7 @@ GameState.prototype.create = function() {
 				var star = this.game.add.image(x, y, 'star');
 				star.scale.set(2);
 				star.alpha = 0.3 + starMap[y][x].alpha * 0.5;
-				star.tint = starMap[y][x].tint * 0xffffff;
+				star.tint = 7*0xffffff/8 + starMap[y][x].tint * 0xffffff/8;
 			}
 		}
 	}
@@ -62,7 +62,7 @@ GameState.prototype.create = function() {
 
 	g_game.cursors = this.game.input.keyboard.createCursorKeys();
 
-	g_game.shootButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+	g_game.buttonXform = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
 	this.game.camera.follow(g_game.player, Phaser.Camera.FOLLOW_LOCKON);
 	//this.game.camera.follow(g_game.player, Phaser.Camera.FOLLOW_PLATFORMER);
