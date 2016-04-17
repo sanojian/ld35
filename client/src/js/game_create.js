@@ -78,6 +78,7 @@ GameState.prototype.create = function() {
 	for (i=0; i<30; i++) {
 		var gem = new Entity(g_game.phaserGame, 0, 0, 'gem');
 		gem.scale.set(g_game.scale);
+		gem.body.setSize(4, 4);
 		gem.customProps = { id: -1 };
 		g_game.gems.add(gem);
 		gem.kill();
