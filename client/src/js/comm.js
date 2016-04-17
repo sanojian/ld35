@@ -28,6 +28,26 @@ function initNetworking() {
 		clients[props.id].sprite = player;
 	});
 
+	gameSocket.on('gemcollected', function(data) {
+		g_game.gems.forEach(function(gem) {
+			if (gem.customProps.id === data.id) {
+				gem.kill();
+			}
+		});
+	});
+
+	gameSocket.on('newgem', function(data) {
+		var gem = g_game.gems.getFirstExists(false);
+		if (gem) {
+			gem.x = data.x;
+			gem.y = data.y;
+			gem.revive();
+			gem.body.velocity.x = 10 * Math.cos(data.angle);
+			gem.body.velocity.y = 10 * Math.sin(data.angle);
+		}
+
+	});
+
 	gameSocket.on('playerLeft', function(id) {
 		clients[id].sprite.destroy();
 		delete clients[id];
@@ -38,6 +58,8 @@ function initNetworking() {
 			var planet = new Entity(g_game.phaserGame, world.planets[i].x, world.planets[i].y, 'planet');
 			planet.anchor.set(0.5, 0.5);
 			planet.scale.set(g_game.scale);
+			planet.body.immovable = true;
+			planet.body.moves = false;
 			g_game.phaserGame.physics.enable(planet);
 			g_game.planets.add(planet);
 		}
@@ -58,9 +80,9 @@ function initNetworking() {
 		clients[client.id].sprite.x = client.x;
 		clients[client.id].sprite.y = client.y;
 		clients[client.id].sprite.angle = client.angle;
-		clients[client.id].sprite.customProps.alive = client.alive;
 		clients[client.id].sprite.customProps.throttle = client.throttle;
 		clients[client.id].sprite.customProps.turn = client.turn;
+		clients[client.id].sprite.customProps.points = client.points;
 		clients[client.id].sprite.body.velocity.x = client.velocity.x;
 		clients[client.id].sprite.body.velocity.y = client.velocity.y;
 
@@ -70,6 +92,14 @@ function initNetworking() {
 		if (client.shooting) {
 			clients[client.id].sprite.shoot(client.id);
 		}
+		if (client.alive && !clients[client.id].sprite.customProps.alive) {
+			// revive
+			if (client.id === myId) {
+				clients[client.id].sprite.customProps.health = g_game.MAX_HEALTH;
+				clients[client.id].sprite.damage(0);
+			}
+		}
+		clients[client.id].sprite.customProps.alive = client.alive;
 
 	});
 

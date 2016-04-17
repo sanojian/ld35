@@ -15,7 +15,7 @@ GameState.prototype.create = function() {
 		starMap[y] = [];
 		for (x=0; x<this.game.world.width; x++) {
 			if (Math.random() < 0.0002) {
-				starMap[y][x] = { alpha: Math.random(), tint: Math.random() };
+				starMap[y][x] = { alpha: Math.random(), tintR: Math.random(), tintG: Math.random(), tintB: Math.random() };
 			}
 			else {
 				starMap[y][x] = 0;
@@ -47,7 +47,10 @@ GameState.prototype.create = function() {
 				var star = this.game.add.image(x, y, 'star');
 				star.scale.set(g_game.scale);
 				star.alpha = 0.3 + starMap[y][x].alpha * 0.5;
-				star.tint = starMap[y][x].tint * 0xffffff;
+				var starTint = Math.floor(0xc0 + starMap[y][x].tintR * 0x3f) << 16;
+				starTint += Math.floor(0xc0 + starMap[y][x].tintG * 0x3f) << 8;
+				starTint += Math.floor(0xc0 + starMap[y][x].tintB * 0x3f);
+				star.tint = starTint;
 			}
 		}
 	}
@@ -58,24 +61,28 @@ GameState.prototype.create = function() {
 
 	g_game.planets = this.game.add.group();
 
+	g_game.gems = this.game.add.group();
+	for (var i=0; i<30; i++) {
+		var gem = new Entity(g_game.phaserGame, 0, 0, 'gem');
+		gem.scale.set(2);
+		gem.customProps = { id: -1 };
+		g_game.gems.add(gem);
+		gem.kill();
+	}
 	g_game.myBullets = this.game.add.group();
 	var bullet;
-	for (var i=0; i<20; i++) {
-		bullet = this.game.add.sprite(0, 0, 'bullet');
-		bullet.anchor.set(0.5, 0.5);
+	for (i=0; i<20; i++) {
+		bullet = new Entity(g_game.phaserGame, 0, 0, 'bullet');
 		bullet.scale.set(2);
 		bullet.customProps = { ownerId: -1 };
-		this.game.physics.enable(bullet);
 		g_game.myBullets.add(bullet);
 		bullet.kill();
 	}
 	g_game.enemyBullets = this.game.add.group();
 	for (i=0; i<200; i++) {
-		bullet = this.game.add.sprite(0, 0, 'bullet');
-		bullet.anchor.set(0.5, 0.5);
+		bullet = new Entity(g_game.phaserGame, 0, 0, 'bullet');
 		bullet.scale.set(2);
 		bullet.customProps = { ownerId: -1 };
-		this.game.physics.enable(bullet);
 		g_game.enemyBullets.add(bullet);
 		bullet.kill();
 	}
@@ -85,6 +92,24 @@ GameState.prototype.create = function() {
 	g_game.friendlyUnits.add(g_game.player);
 
 	g_game.enemyUnits = this.game.add.group();
+
+	var style = { font: "bold 16px 'Press Start 2P'", fill: "#fff", boundsAlignH: "left", boundsAlignV: "top" };
+
+	//  The Text is positioned at 0, 100
+	g_game.scoreText = this.game.add.text(this.game.width - 200, 8, "SCOREBOARD", style);
+	g_game.scoreText.fixedToCamera = true;
+	//g_game.scoreText.scale.set(2);
+
+	g_game.uiHearts = [];
+	g_game.uiHearts[0] = this.game.add.image(this.game.width - 460, 4, 'heart');
+	g_game.uiHearts[0].scale.set(4);
+	g_game.uiHearts[0].fixedToCamera = true;
+	g_game.uiHearts[1] = this.game.add.image(this.game.width - 380, 4, 'heart');
+	g_game.uiHearts[1].scale.set(4);
+	g_game.uiHearts[1].fixedToCamera = true;
+	g_game.uiHearts[2] = this.game.add.image(this.game.width - 300, 4, 'heart');
+	g_game.uiHearts[2].scale.set(4);
+	g_game.uiHearts[2].fixedToCamera = true;
 
 	g_game.cursors = this.game.input.keyboard.createCursorKeys();
 
@@ -96,4 +121,34 @@ GameState.prototype.create = function() {
 	// dont pause when tab out of focus
 	this.stage.disableVisibilityChange = true;
 	initNetworking();
+
+	this.game.time.events.loop(Phaser.Timer.SECOND, updateScoreBoard, this);
 };
+
+function updateScoreBoard() {
+
+	var scores = [];
+	for (var key in clients) {
+		if (clients[key].sprite.customProps.alive) {
+			scores.push({ id: key, score: clients[key].sprite.customProps.points });
+		}
+	}
+
+	var scoreText = '';
+	for (var i=0; i<scores.length; i++) {
+		scoreText += zeroFill(scores[i].score, 3) + ' ' + scores[i].id + '\n';
+	}
+
+	g_game.scoreText.text = scoreText;
+
+}
+
+function zeroFill( number, width )
+{
+	width -= number.toString().length;
+	if ( width > 0 )
+	{
+		return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+	}
+	return number + ""; // always return a string
+}

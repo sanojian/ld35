@@ -24,6 +24,7 @@ var posX = 100;
 var clientColors = [0xff0000, 0x0000ff, 0xffff00, 0x00ff00, 0xff00ff];
 var clients = {};
 var nextClientId = 0;
+var nextGemId = 0;
 var world = { planets: []};
 
 function getRelevantProps(obj) {
@@ -37,6 +38,7 @@ function getRelevantProps(obj) {
 		turn: obj.turn,
 		form: obj.form,
 		alive: obj.alive,
+		points: obj.points,
 		velocity: obj.velocity
 	};
 }
@@ -55,6 +57,7 @@ io.on('connection', function(socket) {
 		angle: 0,
 		form: 1,
 		alive: true,
+		points: 0,
 		velocity: { x: 0, y: 0 },
 		color: clientColors[myId % clientColors.length]
 	};
@@ -71,8 +74,22 @@ io.on('connection', function(socket) {
 		}
 	}
 
+	socket.on('gemcollected', function (data) {
+		clients[myId].points++;
+		socket.broadcast.emit('gemcollected', data);
+	});
+
+	socket.on('newgem', function (data) {
+		data.id = nextGemId++;
+		var angle = Math.random() * 2 * Math.PI;
+		data.angle = angle;
+		socket.broadcast.emit('newgem', data);
+		socket.emit('newgem', data);
+	});
+
 	socket.on('shipdeath', function (clientId) {
 		socket.broadcast.emit('shipdeath', clientId);
+		clients[clientId].points = 0;
 		setTimeout(function() {
 			resetShip(clientId, socket);
 		}, 3000);
@@ -87,6 +104,8 @@ io.on('connection', function(socket) {
 		clients[data.id].angle = data.angle;
 		clients[data.id].form = data.form;
 		clients[data.id].shooting = data.shooting;
+		data.alive = clients[data.id].alive;
+		data.points = clients[data.id].points;
 		socket.broadcast.emit('loc', data);
 		clients[data.id].shooting = false;
 	});

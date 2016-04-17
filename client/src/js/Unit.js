@@ -10,11 +10,13 @@ var Unit = function (game, cx, cy, spriteName) {
 		form: 1,
 		throttle: 0,
 		turn: 0,
-		alive: true
+		alive: true,
+		points: 0
 	};
 
 	this.game.physics.enable(this);
 
+	this.body.bounce.set(0.3);
 	this.engine1 = game.add.sprite(-9, -6,  'engine');
 	this.addChild(this.engine1);
 	this.engine2 = game.add.sprite(-9, 6,  'engine');
@@ -33,11 +35,13 @@ Unit.prototype.xform = function(toForm) {
 
 	var props_engine1_forms = {
 		1: {angle: 0, x: -9, y: -6},
-		2: {angle: 90, x: 1, y: -9}
+		2: {angle: 90, x: 1, y: -9},
+		3: {angle: 150, x: 9, y: -1}
 	};
 	var props_engine2_forms = {
 		1: {angle: 0, x: -9, y: 6},
-		2: {angle: -90, x: 1, y: 9}
+		2: {angle: -90, x: 1, y: 9},
+		3: {angle: -150, x: 9, y: 1}
 	};
 
 	var xform = this.game.add.tween(this.engine1).to( props_engine1_forms[toForm], 2000, "Linear", true);

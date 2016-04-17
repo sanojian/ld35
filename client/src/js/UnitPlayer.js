@@ -8,10 +8,25 @@ var UnitPlayer = function (game, x, y, id, type) {
 
 	this.customProps.frame = 0;
 	this.customProps.lastShot = 0;
+	this.customProps.health = g_game.MAX_HEALTH;
 };
 
 UnitPlayer.prototype = Object.create(Unit.prototype);
 UnitPlayer.prototype.constructor = UnitPlayer;
+
+UnitPlayer.prototype.damage = function(amt) {
+	this.customProps.health -= amt;
+	for (var i=0; i<g_game.MAX_HEALTH; i++) {
+		g_game.uiHearts[i].loadTexture(this.customProps.health >= i+1 ? 'heart' : 'heart_empty');
+	}
+	if (this.customProps.health <= 0) {
+		this.customProps.alive = false;
+		this.customProps.points = 0;
+		this.body.velocity.x = 0;
+		this.body.velocity.y = 0;
+		gameSocket.emit('shipdeath', g_game.myId);
+	}
+};
 
 UnitPlayer.prototype.update = function() {
 
@@ -37,7 +52,7 @@ UnitPlayer.prototype.update = function() {
 		}
 
 		var curTime = new Date().getTime();
-		if (g_game.shootButton.isDown && curTime - this.customProps.lastShot >= g_game['FORM_' + this.customProps.form].shoot_timer) {
+		if (g_game.shootButton.isDown && this.customProps.form !== 3 && curTime - this.customProps.lastShot >= g_game['FORM_' + this.customProps.form].shoot_timer) {
 			this.shoot();
 			this.customProps.lastShot = curTime;
 			shooting = true;
@@ -48,6 +63,9 @@ UnitPlayer.prototype.update = function() {
 			this.xform(2);
 		}
 		else if (g_game.cursors.down.isDown && this.customProps.form === 2) {
+			this.xform(3);
+		}
+		else if (g_game.cursors.down.isDown && this.customProps.form === 3) {
 			this.xform(1);
 		}
 

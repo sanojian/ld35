@@ -7,6 +7,7 @@ window.g_game = {
 	baseWidth: 24*48,
 	baseHeight: 15*48,
 	scale: 3,
+	MAX_HEALTH: 3,
 
 	SHOOT_TIMER: 2000,
 
@@ -24,5 +25,10 @@ window.g_game = {
 		thrust: 1,
 		turn: 3,
 		shoot_timer: 500
+	},
+	FORM_3: {
+		thrust: 1,
+		turn: 2,
+		shoot_timer: 100000
 	}
 };
