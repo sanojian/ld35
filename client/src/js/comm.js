@@ -5,7 +5,6 @@
 function initNetworking() {
 	gameSocket = io();
 
-	//var myId;
 	gameSocket.on('my_props', function(props) {
 		myId = props.id;
 		var color = g_game.palette[myId % g_game.palette.length].name;
@@ -16,7 +15,6 @@ function initNetworking() {
 		g_game.player.x = props.x;
 		g_game.player.y = props.y;
 		g_game.player.angle = props.angle;
-		//g_game.player.tint = props.color;
 		clients[props.id].sprite = g_game.player;
 	});
 
@@ -28,7 +26,6 @@ function initNetworking() {
 		clients[props.id] = props;
 		var color = g_game.palette[props.id % g_game.palette.length].name;
 		var player = new Unit(g_game.phaserGame, props.x, props.y, 'ship_' + color);
-		//player.tint = props.color;
 		g_game.enemyUnits.add(player);
 		clients[props.id].sprite = player;
 	});

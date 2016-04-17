@@ -16,4 +16,7 @@ GameState.prototype.preload = function() {
 	this.game.load.image('propulsion', './assets/propulsion.png');
 	this.game.load.image('particle', './assets/particle.png');
 
+	//this.game.load.audio('shoot', './assets/shoot.mp3');
+	//this.game.load.audio('bump', './assets/bump.mp3');
+
 };//Loads art assets (pictures and sounds)

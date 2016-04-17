@@ -8,7 +8,6 @@ GameState.prototype.create = function() {
 
 	this.game.world.setBounds(0, 0, 4800, 4800);
 
-	createShipTextures(this.game);
 
 	// draw random starfield
 	var starMap = [];
