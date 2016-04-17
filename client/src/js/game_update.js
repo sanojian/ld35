@@ -56,6 +56,7 @@ function damagePlayer(player, planet) {
 }
 
 function shootPlanet(planet, bullet) {
+	explodeHere(bullet.x, bullet.y, bullet.game);
 	bullet.kill();
 }
 

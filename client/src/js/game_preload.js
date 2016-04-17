@@ -12,5 +12,7 @@ GameState.prototype.preload = function() {
 	this.game.load.image('gem', './assets/gem.png');
 	this.game.load.image('heart', './assets/heart.png');
 	this.game.load.image('heart_empty', './assets/heart_empty.png');
+	this.game.load.image('propulsion', './assets/propulsion.png');
+	this.game.load.image('particle', './assets/particle.png');
 
 };//Loads art assets (pictures and sounds)

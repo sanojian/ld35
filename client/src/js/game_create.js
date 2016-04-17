@@ -55,16 +55,28 @@ GameState.prototype.create = function() {
 		}
 	}
 
-
-
 	this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
 	g_game.planets = this.game.add.group();
 
+	g_game.propulsionFx = this.game.add.group();
+	for (var i=0; i<200; i++) {
+		var p = new Entity(g_game.phaserGame, 0, 0, 'propulsion');
+		p.scale.set(g_game.scale);
+		g_game.propulsionFx.add(p);
+		p.kill();
+	}
+	g_game.particles = this.game.add.group();
+	for (i=0; i<30; i++) {
+		var p2 = new Entity(g_game.phaserGame, 0, 0, 'particle');
+		p2.scale.set(g_game.scale);
+		g_game.particles.add(p2);
+		p2.kill();
+	}
 	g_game.gems = this.game.add.group();
-	for (var i=0; i<30; i++) {
+	for (i=0; i<30; i++) {
 		var gem = new Entity(g_game.phaserGame, 0, 0, 'gem');
-		gem.scale.set(2);
+		gem.scale.set(g_game.scale);
 		gem.customProps = { id: -1 };
 		g_game.gems.add(gem);
 		gem.kill();
@@ -73,7 +85,7 @@ GameState.prototype.create = function() {
 	var bullet;
 	for (i=0; i<20; i++) {
 		bullet = new Entity(g_game.phaserGame, 0, 0, 'bullet');
-		bullet.scale.set(2);
+		bullet.scale.set(g_game.scale);
 		bullet.customProps = { ownerId: -1 };
 		g_game.myBullets.add(bullet);
 		bullet.kill();
@@ -81,7 +93,7 @@ GameState.prototype.create = function() {
 	g_game.enemyBullets = this.game.add.group();
 	for (i=0; i<200; i++) {
 		bullet = new Entity(g_game.phaserGame, 0, 0, 'bullet');
-		bullet.scale.set(2);
+		bullet.scale.set(g_game.scale);
 		bullet.customProps = { ownerId: -1 };
 		g_game.enemyBullets.add(bullet);
 		bullet.kill();
@@ -151,4 +163,22 @@ function zeroFill( number, width )
 		return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
 	}
 	return number + ""; // always return a string
+}
+
+function explodeHere(x, y, game) {
+
+	for (var i=0; i<4; i++) {
+		var p = g_game.particles.getFirstExists(false);
+		if (p) {
+			p.revive();
+			p.x = x;
+			p.y = y;
+			var angle = Math.PI/2 * i + Math.random() * Math.PI/2;
+			p.angle = angle * 180/Math.PI;
+			p.body.velocity.x = (200 + Math.random() * 100) * Math.cos(angle);
+			p.body.velocity.y = (200 + Math.random() * 100) * Math.sin(angle);
+			game.time.events.add(Phaser.Timer.SECOND * 2, p.kill, p);
+		}
+	}
+
 }

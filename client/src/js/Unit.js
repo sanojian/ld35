@@ -11,7 +11,8 @@ var Unit = function (game, cx, cy, spriteName) {
 		throttle: 0,
 		turn: 0,
 		alive: true,
-		points: 0
+		points: 0,
+		frame: 0
 	};
 
 	this.game.physics.enable(this);
@@ -74,6 +75,8 @@ Unit.prototype.shoot = function(clientId) {
 
 Unit.prototype.update = function() {
 
+	this.customProps.frame++;
+
 	if (this.customProps.alive) {
 		this.alpha = 1;
 	}
@@ -85,6 +88,17 @@ Unit.prototype.update = function() {
 	this.body.velocity.x += Math.cos(this.angle * Math.PI / 180) * this.customProps.throttle * g_game['FORM_' + this.customProps.form].thrust;
 	this.body.velocity.y += Math.sin(this.angle * Math.PI / 180) * this.customProps.throttle * g_game['FORM_' + this.customProps.form].thrust;
 	this.angle += this.customProps.turn * g_game['FORM_' + this.customProps.form].turn;
+
+	if (this.customProps.form !== 0 && this.customProps.throttle && this.customProps.frame % (60 / g_game['FORM_' + this.customProps.form].thrust) === 0) {
+		// show propulsion
+		var p = g_game.propulsionFx.getFirstExists(false);
+		if (p) {
+			p.revive();
+			p.x = this.x;
+			p.y = this.y;
+			this.game.time.events.add(Phaser.Timer.SECOND * 3, p.kill, p);
+		}
+	}
 
 	Entity.prototype.update.call(this);
 };
