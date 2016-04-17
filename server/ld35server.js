@@ -36,6 +36,7 @@ function getRelevantProps(obj) {
 		angle: obj.angle,
 		throttle: obj.throttle,
 		turn: obj.turn,
+		name: obj.name,
 		form: obj.form,
 		alive: obj.alive,
 		points: obj.points,
@@ -57,6 +58,7 @@ io.on('connection', function(socket) {
 		angle: 0,
 		form: 1,
 		alive: true,
+		name: '',
 		points: 0,
 		velocity: { x: 0, y: 0 },
 		color: clientColors[myId % clientColors.length]
@@ -87,6 +89,11 @@ io.on('connection', function(socket) {
 		socket.emit('newgem', data);
 	});
 
+	socket.on('myname', function (name) {
+		clients[myId].name = name;
+		console.log('user name ' + name);
+	});
+
 	socket.on('shipdeath', function (clientId) {
 		socket.broadcast.emit('shipdeath', clientId);
 		clients[clientId].points = 0;
@@ -106,6 +113,7 @@ io.on('connection', function(socket) {
 		clients[data.id].shooting = data.shooting;
 		data.alive = clients[data.id].alive;
 		data.points = clients[data.id].points;
+		data.name = clients[data.id].name;
 		socket.broadcast.emit('loc', data);
 		clients[data.id].shooting = false;
 	});

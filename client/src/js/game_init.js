@@ -37,7 +37,8 @@ function initPhaser() {
 			//this.scale.setScreenSize(true);
 			this.game.canvas.oncontextmenu = function (e) { e.preventDefault(); };
 
-			this.state.start('game');
+			//this.state.start('game');
+			this.state.start('Splash');
 		}
 	};
 
@@ -46,6 +47,7 @@ function initPhaser() {
 
 	g_game.phaserGame = new Phaser.Game(width, height, Phaser.AUTO, '', null, false, false);	//Creating an instance of a phaser game
 	g_game.phaserGame.state.add('Boot', Boot);													//Adding "boot" state
+	g_game.phaserGame.state.add('Splash', SplashState);												//Adding "game" state
 	g_game.phaserGame.state.add('game', GameState);												//Adding "game" state
 	g_game.phaserGame.state.start('Boot');														//Starting boot state
 }

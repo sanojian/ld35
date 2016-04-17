@@ -15,7 +15,7 @@ UnitPlayer.prototype = Object.create(Unit.prototype);
 UnitPlayer.prototype.constructor = UnitPlayer;
 
 UnitPlayer.prototype.damage = function(amt) {
-	this.customProps.health -= amt;
+	this.customProps.health = Math.min(g_game.MAX_HEALTH, this.customProps.health - amt);
 	for (var i=0; i<g_game.MAX_HEALTH; i++) {
 		g_game.uiHearts[i].loadTexture(this.customProps.health >= i+1 ? 'heart' : 'heart_empty');
 	}

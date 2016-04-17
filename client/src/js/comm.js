@@ -19,6 +19,7 @@ function initNetworking() {
 
 	gameSocket.on('new_player', function(props) {
 		if (props.id === myId) {
+			gameSocket.emit('myname', g_game.playerName);
 			return;
 		}
 		clients[props.id] = props;
@@ -79,6 +80,7 @@ function initNetworking() {
 		}
 		clients[client.id].sprite.x = client.x;
 		clients[client.id].sprite.y = client.y;
+		clients[client.id].name = client.name;
 		clients[client.id].sprite.angle = client.angle;
 		clients[client.id].sprite.customProps.throttle = client.throttle;
 		clients[client.id].sprite.customProps.turn = client.turn;

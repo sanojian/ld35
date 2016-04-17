@@ -96,18 +96,18 @@ GameState.prototype.create = function() {
 	var style = { font: "bold 16px 'Press Start 2P'", fill: "#fff", boundsAlignH: "left", boundsAlignV: "top" };
 
 	//  The Text is positioned at 0, 100
-	g_game.scoreText = this.game.add.text(this.game.width - 200, 8, "SCOREBOARD", style);
+	g_game.scoreText = this.game.add.text(this.game.width - 240, 8, "SCOREBOARD", style);
 	g_game.scoreText.fixedToCamera = true;
 	//g_game.scoreText.scale.set(2);
 
 	g_game.uiHearts = [];
-	g_game.uiHearts[0] = this.game.add.image(this.game.width - 460, 4, 'heart');
+	g_game.uiHearts[0] = this.game.add.image(this.game.width - 500, 4, 'heart');
 	g_game.uiHearts[0].scale.set(4);
 	g_game.uiHearts[0].fixedToCamera = true;
-	g_game.uiHearts[1] = this.game.add.image(this.game.width - 380, 4, 'heart');
+	g_game.uiHearts[1] = this.game.add.image(this.game.width - 420, 4, 'heart');
 	g_game.uiHearts[1].scale.set(4);
 	g_game.uiHearts[1].fixedToCamera = true;
-	g_game.uiHearts[2] = this.game.add.image(this.game.width - 300, 4, 'heart');
+	g_game.uiHearts[2] = this.game.add.image(this.game.width - 340, 4, 'heart');
 	g_game.uiHearts[2].scale.set(4);
 	g_game.uiHearts[2].fixedToCamera = true;
 
@@ -130,13 +130,13 @@ function updateScoreBoard() {
 	var scores = [];
 	for (var key in clients) {
 		if (clients[key].sprite.customProps.alive) {
-			scores.push({ id: key, score: clients[key].sprite.customProps.points });
+			scores.push({ name: key == g_game.myId ? g_game.playerName : clients[key].name, score: clients[key].sprite.customProps.points });
 		}
 	}
 
 	var scoreText = '';
 	for (var i=0; i<scores.length; i++) {
-		scoreText += zeroFill(scores[i].score, 3) + ' ' + scores[i].id + '\n';
+		scoreText += zeroFill(scores[i].score, 3) + ' ' + scores[i].name + '\n';
 	}
 
 	g_game.scoreText.text = scoreText;

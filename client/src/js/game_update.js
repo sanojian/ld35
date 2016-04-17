@@ -25,6 +25,7 @@ function collectGem(player, gem) {
 
 	gameSocket.emit('gemcollected', {id: gem.customProps.id });
 	player.customProps.points++;
+	player.damage(-1);
 	gem.kill();
 }
 
@@ -42,7 +43,6 @@ function shootPlayer(player, bullet) {
 	}
 
 	player.damage(1);
-	console.log('damage');
 	bullet.kill();
 }
 
