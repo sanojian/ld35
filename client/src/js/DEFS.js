@@ -4,8 +4,8 @@
 
 
 window.g_game = {
-	baseWidth: 24*48,
-	baseHeight: 15*48,
+	baseWidth: 900,
+	baseHeight: 600,
 	scale: 3,
 	MAX_HEALTH: 3,
 	XFORM_TIME: 1000,
