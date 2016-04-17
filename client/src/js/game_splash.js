@@ -28,11 +28,11 @@ SplashState.prototype = {
 
 		style = { font: "bold 24px 'Press Start 2P'", fill: "#6DC2CA" };
 
-		var nameText = this.game.add.text(this.game.width/2, 500, localStorage.playerName || '---', style);
+		var nameText = this.game.add.text(this.game.width/2, 400, localStorage.playerName || '---', style);
 		nameText.anchor.set(0.5, 0.5);
 
 		style = { font: "bold 24px 'Press Start 2P'", fill: "#DEEED6" };
-		this.game.add.text(this.game.width/2, 600, 'Type in a name and ENTER to play', style).anchor.set(0.5, 0.5);
+		this.game.add.text(this.game.width/2, 500, 'Type in a name and ENTER to play', style).anchor.set(0.5, 0.5);
 
 		var keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -63,7 +63,7 @@ SplashState.prototype = {
 			}
 		}, this);
 
-		var gem = this.game.add.sprite(3*this.game.width/4, 260, 'gem');
+		var gem = this.game.add.sprite(4*this.game.width/5, 220, 'gem');
 		gem.anchor.set(0.5, 0.5);
 		gem.scale.set(4);
 		style = { font: "bold 24px 'Press Start 2P'", fill: "#DEEED6" };
@@ -73,7 +73,7 @@ SplashState.prototype = {
 		this.game.add.text(this.game.width/2, gem.y + 10, 'SPACE fire', style).anchor.set(0.5, 0.5);
 		this.game.add.text(this.game.width/2, gem.y + 50, 'DOWN xform', style).anchor.set(0.5, 0.5);
 
-		var ship = this.game.add.sprite(this.game.width/4, gem.y, 'ships', 'ship_grey');
+		var ship = this.game.add.sprite(this.game.width/5, gem.y, 'ships', 'ship_grey');
 		ship.anchor.set(0.5, 0.5);
 		var engine1 = this.game.add.sprite(-9, -6,  'engine');
 		ship.addChild(engine1);
