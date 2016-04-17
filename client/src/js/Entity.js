@@ -2,9 +2,9 @@
  * Created by jonas on 2016-04-16.
  */
 
-var Entity = function (game, cx, cy, spriteName) {
+var Entity = function (game, cx, cy, spriteName, spriteName2) {
 
-	Phaser.Sprite.call(this, game, cx, cy, spriteName);
+	Phaser.Sprite.call(this, game, cx, cy, spriteName, spriteName2);
 
 	this.game.physics.enable(this);
 

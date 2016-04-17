@@ -21,7 +21,6 @@ var io = require('socket.io')(theApp);
 
 
 var posX = 100;
-var clientColors = [0xff0000, 0x0000ff, 0xffff00, 0x00ff00, 0xff00ff];
 var clients = {};
 var nextClientId = 0;
 var nextGemId = 0;
@@ -32,7 +31,6 @@ function getRelevantProps(obj) {
 		id: obj.id,
 		x: obj.x,
 		y: obj.y,
-		color: obj.color,
 		angle: obj.angle,
 		throttle: obj.throttle,
 		turn: obj.turn,
@@ -60,8 +58,7 @@ io.on('connection', function(socket) {
 		alive: true,
 		name: '',
 		points: 0,
-		velocity: { x: 0, y: 0 },
-		color: clientColors[myId % clientColors.length]
+		velocity: { x: 0, y: 0 }
 	};
 
 	socket.emit('world', world);

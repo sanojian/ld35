@@ -8,6 +8,8 @@ GameState.prototype.create = function() {
 
 	this.game.world.setBounds(0, 0, 4800, 4800);
 
+	createShipTextures(this.game);
+
 	// draw random starfield
 	var starMap = [];
 	var x, y;
@@ -100,7 +102,7 @@ GameState.prototype.create = function() {
 	}
 
 	g_game.friendlyUnits = this.game.add.group();
-	g_game.player = new UnitPlayer(this.game, 1200, 1200, 'ship');
+	g_game.player = new UnitPlayer(this.game, 1200, 1200, 'ship_blue');
 	g_game.friendlyUnits.add(g_game.player);
 
 	g_game.enemyUnits = this.game.add.group();

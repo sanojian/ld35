@@ -4,7 +4,7 @@
 
 var Unit = function (game, cx, cy, spriteName) {
 
-	Entity.call(this, game, cx, cy, spriteName);
+	Entity.call(this, game, cx, cy, 'ships', spriteName);
 
 	this.customProps = {
 		form: 1,
