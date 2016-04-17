@@ -6,7 +6,7 @@ GameState.prototype.create = function() {
 
 	this.game.stage.backgroundColor = '#140C1C';
 
-	this.game.world.setBounds(0, 0, 4800, 4800);
+	this.game.world.setBounds(0, 0, 3200, 3200);
 
 	// draw random starfield
 	var starMap = [];

@@ -136,8 +136,8 @@ function resetShip(clientId, socket) {
 }
 
 function initWorld() {
-	world.width = 4800;
-	world.height = 4800;
+	world.width = 3200;
+	world.height = 3200;
 
 	// generate planets
 	for (var i=0; i<8; i++) {
