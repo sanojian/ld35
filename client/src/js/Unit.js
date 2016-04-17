@@ -45,8 +45,8 @@ Unit.prototype.xform = function(toForm) {
 		3: {angle: -150, x: 9, y: 1}
 	};
 
-	var xform = this.game.add.tween(this.engine1).to( props_engine1_forms[toForm], 2000, "Linear", true);
-	this.game.add.tween(this.engine2).to( props_engine2_forms[toForm], 2000, "Linear", true);
+	var xform = this.game.add.tween(this.engine1).to( props_engine1_forms[toForm], g_game.XFORM_TIME, "Linear", true);
+	this.game.add.tween(this.engine2).to( props_engine2_forms[toForm], g_game.XFORM_TIME, "Linear", true);
 
 	var self = this;
 	xform.onComplete.add(function() { self.customProps.form = toForm; });

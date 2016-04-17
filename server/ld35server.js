@@ -89,6 +89,10 @@ io.on('connection', function(socket) {
 		socket.emit('newgem', data);
 	});
 
+	socket.on('playershot', function (data) {
+		socket.broadcast.emit('playershot', data);
+	});
+
 	socket.on('myname', function (name) {
 		clients[myId].name = name;
 		console.log('user name ' + name);
@@ -136,13 +140,13 @@ function resetShip(clientId, socket) {
 }
 
 function initWorld() {
-	world.width = 3200;
-	world.height = 3200;
+	world.width = 4800;
+	world.height = 4800;
 
 	// generate planets
 	for (var i=0; i<8; i++) {
-		var x = Math.floor(Math.random() * world.width);
-		var y = Math.floor(Math.random() * world.height);
+		var x = 600 + Math.floor(Math.random() * world.width - 1200);
+		var y = 500 + Math.floor(Math.random() * world.height - 1000);
 		world.planets.push({ x: x, y: y });
 	}
 }

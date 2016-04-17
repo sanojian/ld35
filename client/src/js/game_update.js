@@ -43,6 +43,8 @@ function shootPlayer(player, bullet) {
 	}
 
 	player.damage(1);
+	gameSocket.emit('playershot', {x: bullet.x, y: bullet.y});
+	explodeHere(bullet.x, bullet.y);
 	bullet.kill();
 }
 
@@ -53,6 +55,7 @@ function damagePlayer(player, planet) {
 	}
 
 	player.damage(5);
+	explodeHere(player.x, player.y);
 }
 
 function shootPlanet(planet, bullet) {

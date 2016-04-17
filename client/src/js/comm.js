@@ -66,6 +66,10 @@ function initNetworking() {
 		}
 	});
 
+	gameSocket.on('playershot', function(data) {
+		explodeHere(data.x, data.y);
+	});
+
 	gameSocket.on('shipdeath', function(clientId) {
 		console.log('kill ' + clientId);
 		clients[clientId].sprite.customProps.alive = false;
