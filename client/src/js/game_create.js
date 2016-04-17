@@ -4,9 +4,9 @@
 
 GameState.prototype.create = function() {
 
-	this.game.stage.backgroundColor = '#333333';
+	this.game.stage.backgroundColor = '#140C1C';
 
-	this.game.world.setBounds(0, 0, 2400, 2400);
+	this.game.world.setBounds(0, 0, 4800, 4800);
 
 	// draw random starfield
 	var starMap = [];
@@ -14,7 +14,7 @@ GameState.prototype.create = function() {
 	for (y=0; y<this.game.world.height; y++) {
 		starMap[y] = [];
 		for (x=0; x<this.game.world.width; x++) {
-			if (Math.random() < 0.0002) {
+			if (Math.random() < 0.0001) {
 				starMap[y][x] = { alpha: Math.random(), tintR: Math.random(), tintG: Math.random(), tintB: Math.random() };
 			}
 			else {
@@ -146,6 +146,10 @@ function updateScoreBoard() {
 		}
 	}
 
+	scores.sort(function(a, b) {
+		return b.score - a.score;
+	});
+
 	var scoreText = '';
 	for (var i=0; i<scores.length; i++) {
 		scoreText += zeroFill(scores[i].score, 3) + ' ' + scores[i].name + '\n';
@@ -174,10 +178,10 @@ function explodeHere(x, y, game) {
 			p.x = x;
 			p.y = y;
 			var angle = Math.PI/2 * i + Math.random() * Math.PI/2;
-			p.angle = angle * 180/Math.PI;
-			p.body.velocity.x = (200 + Math.random() * 100) * Math.cos(angle);
-			p.body.velocity.y = (200 + Math.random() * 100) * Math.sin(angle);
-			game.time.events.add(Phaser.Timer.SECOND * 2, p.kill, p);
+			p.angle = 180 - angle * 180/Math.PI;
+			p.body.velocity.x = (100 + Math.random() * 100) * Math.cos(angle);
+			p.body.velocity.y = (100 + Math.random() * 100) * Math.sin(angle);
+			game.time.events.add(Phaser.Timer.SECOND * 1, p.kill, p);
 		}
 	}
 

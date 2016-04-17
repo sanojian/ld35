@@ -11,7 +11,7 @@ SplashState.prototype = {
 	create: function() {
 		var self = this;
 
-		this.game.stage.backgroundColor = '#333333';
+		this.game.stage.backgroundColor = '#140C1C';
 
 		this.game.stage.smoothed = false;
 
